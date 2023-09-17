@@ -50,24 +50,18 @@ def main():
         for game in games:
             total += 1
 
-        print(f"{total} NHL games were played on {month}/{day}/{year}")
+        print(f"{total} NHL game(s) were played on {m}/{d}/{ye}")
         print(" ")
 
         for game in games:
-            x = game.find(class_="loser")
-            l = x.a.string
-            y = game.find(class_="loser")
-            lf = y.find(class_="right").string
-
-            z = game.find(class_="winner")
-            w = z.a.string
-            n = game.find(class_="winner")
-            wf = n.find(class_="right").string
-
-            print(f"{l} {lf}")
-            print(f"{w} {wf}")
+            x = game.find_all('a')
+            for each in x:
+                if each.string == None:
+                    continue
+            
+            print(each.string)
             print(" ")
-
+            
         xy = input("Would you like to input another date? (Y/N) ")
 
         if xy.upper() == "N":
