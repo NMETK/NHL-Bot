@@ -54,12 +54,25 @@ def main():
         print(" ")
 
         for game in games:
-            x = game.find_all('a')
-            for each in x:
-                if each.string == None:
-                    continue
-            
-            print(each.string)
+            x = game.find(class_="loser")
+            y = game.find(class_="winner")
+            if x:
+                l = x.a.string
+                lf = x.find(class_="right").string
+                w = y.a.string
+                wf = y.find(class_="right").string
+            else:
+                x = game.find_all('a')
+                xf = game.find(class_='right').string
+                for each in x:
+                    if each.string == None:
+                        continue
+                    print(f"{each.string} {xf}")
+
+                print(" ")
+ 
+            print(f"{l} {lf}")
+            print(f"{w} {wf}")
             print(" ")
             
         xy = input("Would you like to input another date? (Y/N) ")
