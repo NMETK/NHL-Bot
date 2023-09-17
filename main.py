@@ -1,37 +1,80 @@
 from bs4 import BeautifulSoup
 import requests
+from datetime import datetime
 
-month = input("Input a Month: ")
-day = input("Input a Day: ")
-year = input("Input a Year: ")
-print(" ")
+def main():
 
-URL = f"https://www.hockey-reference.com/boxscores/index.fcgi?month={month}&day={day}&year={year}"
-result = requests.get(URL).text
-doc = BeautifulSoup(result, "html.parser")
+    year = datetime.today().strftime('%Y')
+    month = datetime.today().strftime('%m')
+    day = datetime.today().strftime('%d')
 
-bod = doc.body
-games = bod.find_all(class_="game_summary nohover")
+    while True:
 
-total = 0
+        ye = input("Input a Year: ")
+        if ye > year:
+            while True:
+                print(f"{ye} hasnt happend yet")
+                ye = input("Input a Year: ")
+                if ye <= year:
+                    break
+            
 
-for game in games:
-    total += 1
+        m = input("Input a Month: ")
+        if ye == year and m > month:
+            while True:
+                print(f"Date hasnt happend yet")                # cant input single numbers, ex - 1,2,3, etc / must be 01,02,03 etc
+                m = input("Input a Month: ")
+                if ye ==  year and m <= month:
+                    break
 
-print(f"{total} NHL games were played on {month}/{day}/{year}")
-print(" ")
+        d = input("Input a Day: ")
+        if ye == year and m <= month and d > day:
+            while True:
+                print("Date hasnt happend yet")
+                d = input("Input a Day: ")
+                if ye == year and m <= month and d <= day:
+                    break
+            
+        
+        print(" ")
 
-for game in games:
-    x = game.find(class_="loser")
-    l = x.a.string
-    y = game.find(class_="loser")
-    lf = y.find(class_="right").string
+        URL = f"https://www.hockey-reference.com/boxscores/index.fcgi?month={m}&day={d}&year={ye}"
+        result = requests.get(URL).text
+        doc = BeautifulSoup(result, "html.parser")
 
-    z = game.find(class_="winner")
-    w = z.a.string
-    n = game.find(class_="winner")
-    wf = n.find(class_="right").string
+        bod = doc.body
+        games = bod.find_all(class_="game_summary nohover")
 
-    print(f"{l} {lf}")
-    print(f"{w} {wf}")
-    print(" ")
+        total = 0
+
+        for game in games:
+            total += 1
+
+        print(f"{total} NHL games were played on {month}/{day}/{year}")
+        print(" ")
+
+        for game in games:
+            x = game.find(class_="loser")
+            l = x.a.string
+            y = game.find(class_="loser")
+            lf = y.find(class_="right").string
+
+            z = game.find(class_="winner")
+            w = z.a.string
+            n = game.find(class_="winner")
+            wf = n.find(class_="right").string
+
+            print(f"{l} {lf}")
+            print(f"{w} {wf}")
+            print(" ")
+
+        xy = input("Would you like to input another date? (Y/N) ")
+
+        if xy.upper() == "N":
+            quit()
+        if xy.upper() == "Y":
+            continue
+
+
+if __name__ == "__main__":
+    main()
